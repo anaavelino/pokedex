@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import FlexBox from '../../components/Flexbox';
 import { styled } from '@mui/system';
 import Background from '../../assets/pokedex-background.svg';
 import imageNotFound from '../../assets/pokebola-removebg-preview.png';
 import { CustomTypes } from './CustomType';
+import './styles.css'
 
 const CustomImg = styled('img')({
   height: '10rem',
@@ -24,19 +25,9 @@ const CustomDiv = styled('div')(({ theme }) => ({
 export default function Card({ arrayPokemon }) {
   const [pokemon, setIdPokemon] = useState(arrayPokemon);
   const [theme, setTheme] = useState([]);
-  console.log('THEMEE', arrayPokemon);
-
-  selectTheme();
-  function selectTheme() {
-    switch (theme) {
-      case 'water':
-        theme.push({ colorCard: '#4B84AA', colorImg: '#71A1C1' });
-        return theme;
-
-      default:
-        return 'a';
-    }
-  }
+  const [abilitie, setAbilitie] = useState('none');
+  console.log('card', pokemon);
+  console.log('abilitie', abilitie);
 
   return (
     <>
@@ -76,6 +67,33 @@ export default function Card({ arrayPokemon }) {
             // borderColor:theme.palette.primary.main,
           })}
         >
+          <FlexBox direction={'row'} sx={{width:'100%', justifyContent:'right'}}>
+            {!abilitie ? (
+              <Button
+                sx={(theme) => ({
+                  color: '#F6F5F3',
+                  backgroundColor: pokemon[0].theme[0].card,
+                })}
+                onClick={() => {
+                  setAbilitie(true);
+                }}
+              >
+                abilitie
+              </Button>
+            ) : (
+              <Button
+                sx={(theme) => ({
+                  color: '#F6F5F3',
+                  background: pokemon[0].theme[0].card,
+                })}
+                onClick={() => {
+                  setAbilitie(false);
+                }}
+              >
+                Info
+              </Button>
+            )}
+          </FlexBox>
           <Typography
             sx={(theme) => ({
               fontSize: theme.typography.h5.fontSize,
@@ -92,24 +110,37 @@ export default function Card({ arrayPokemon }) {
           >
             {pokemon[0].name}
           </Typography>
-          <FlexBox
+          <div
             direction={'column'}
-            sx={{
+            style={{
               backgroundColor: pokemon[0].theme[0].cardPoke,
               borderRadius: '50%',
               padding: '15px',
             }}
+            className='card-pokemon'
           >
             <CustomImg src={pokemon[0].img}></CustomImg>
-          </FlexBox>
+          </div>
           <CustomDiv>
             <FlexBox direction={'row'} align={'space-around'}>
-              <Typography sx={{ textAlign: 'center', width: '100%' }}>
-                Altura:{pokemon[0].height}m
-              </Typography>
-              <Typography sx={{ textAlign: 'center', width: '100%' }}>
-                Peso: {pokemon[0].weight}Kg
-              </Typography>
+              {!abilitie ? (
+                pokemon[0].abilitie.map((val) => {
+                  return (
+                    <Typography sx={{ textAlign: 'center', width: '100%' }}>
+                      {val.ability.name}
+                    </Typography>
+                  );
+                })
+              ) : (
+                <>
+                  <Typography sx={{ textAlign: 'center', width: '100%' }}>
+                    height:{pokemon[0].height}m
+                  </Typography>
+                  <Typography sx={{ textAlign: 'center', width: '100%' }}>
+                    weight: {pokemon[0].weight}Kg
+                  </Typography>
+                </>
+              )}
             </FlexBox>
             <FlexBox direction={'row'} align={'flex-end'}>
               {pokemon[0].types.map((val) => {

@@ -67,8 +67,8 @@ export default function BuscarPokemon() {
         const dados = [];
         var result = res.data;
         array_pokemon.push(result);
+        console.log('>>>>>>', result);
         array_pokemon.map((value, index) => {
-          console.log('->', value.sprites.other.dream_world.front_default);
           setIdPokemon(value.id);
           const type = value.types;
           const abilitie = value.abilities;
